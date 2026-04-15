@@ -6,52 +6,167 @@
   <title>Islamic Reminders</title>
 
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: white;
-      text-align: center;
+      min-height: 100vh;
     }
 
     header {
-      background: #14532d;
-      padding: 25px;
+      background: linear-gradient(135deg, #14532d 0%, #1e7c34 100%);
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     h1 {
-      margin: 0;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
     }
 
     .container {
-      padding: 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
     }
 
     .card {
-      background: #1e293b;
-      margin: 15px auto;
-      padding: 15px;
-      border-radius: 12px;
-      max-width: 500px;
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    input {
-      padding: 10px;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(20, 83, 45, 0.3);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #86efac;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
       border-radius: 8px;
-      border: none;
-      width: 200px;
-      margin-top: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(15, 23, 42, 0.8);
+      color: white;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #86efac;
     }
 
     button {
-      padding: 10px 15px;
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: linear-gradient(135deg, #14532d 0%, #1e7c34 100%);
+      color: white;
       border: none;
       border-radius: 8px;
-      background: #14532d;
-      color: white;
       cursor: pointer;
-      margin-left: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(20, 83, 45, 0.4);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .prayer-time {
+      background: rgba(134, 239, 172, 0.1);
+      padding: 10px;
+      margin: 8px 0;
+      border-left: 4px solid #86efac;
+      border-radius: 4px;
+    }
+
+    .prayer-time strong {
+      color: #86efac;
+    }
+
+    .content {
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      border-left-color: #ef4444;
+      color: #fca5a5;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+
+    .success {
+      background: rgba(134, 239, 172, 0.1);
+      border-left: 4px solid #86efac;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 0 15px;
+      }
     }
   </style>
 </head>
@@ -60,49 +175,146 @@
 
 <header>
   <h1>🌙 Islamic Reminders</h1>
-  <p>Find daily prayer times by city</p>
+  <p class="subtitle">Find daily inspiration and prayer times</p>
 </header>
 
 <div class="container">
+  <div class="grid">
 
-  <div class="card">
-    <h2>Enter Your City</h2>
-    <input id="city" placeholder="e.g. Seattle" />
-    <button onclick="getPrayerTimes()">Get Times</button>
+    <!-- Prayer Times Card -->
+    <div class="card">
+      <h2>🙏 Prayer Times</h2>
+      <input id="city" type="text" placeholder="Enter your city (e.g., Seattle)">
+      <button onclick="getPrayerTimes()">Get Prayer Times</button>
+      <div id="prayer-results" class="content" style="display:none;"></div>
+    </div>
+
+    <!-- Quran Verse Card -->
+    <div class="card">
+      <h2>📖 Verse of the Day</h2>
+      <p>Click to get a random Quranic verse for inspiration:</p>
+      <button onclick="getQuranVerse()">Get Random Verse</button>
+      <div id="quran-results" class="content" style="display:none;"></div>
+    </div>
+
+    <!-- Daily Du'a Card -->
+    <div class="card">
+      <h2>💬 Daily Du'a</h2>
+      <p>Get a random du'a for guidance:</p>
+      <button onclick="getDua()">Get Du'a</button>
+      <div id="dua-results" class="content" style="display:none;"></div>
+    </div>
+
   </div>
-
-  <div class="card" id="results">
-    <h2>Prayer Times</h2>
-    <p>Enter a city to see times</p>
-  </div>
-
 </div>
 
+<footer>
+  <p>Made with ❤️ for the Muslim community | Islamic Reminders 2026</p>
+</footer>
+
 <script>
-async function getPrayerTimes() {
-  const city = document.getElementById("city").value;
+const duas = [
+  { text: "Allahumma inni asaluka 'ilman naafi'an wa 'amalan mutaqabbalan", translation: "O Allah, I ask You for beneficial knowledge and accepted deeds" },
+  { text: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar", translation: "Our Lord, give us good in this world and good in the Hereafter, and save us from the punishment of the Fire" },
+  { text: "Allahumma inni a'udhu bika min sharri nafsee wa min sharri ash-shaytani wa shirki", translation: "O Allah, I seek refuge in You from the evil of myself and from the evil of Satan and his polytheism" },
+  { text: "Ya Hayyu ya Qayyum bi rahmatika astaghith", translation: "O Ever-Living, O Sustainer of Existence, I seek help in Your mercy" },
+  { text: "Allahumma اجعل لنا من كل ما أصابنا حظا من رحمتك", translation: "O Allah, make for us a share of mercy from everything that befalls us" },
+  { text: "Subhana Rabbika Rabb al-'Izzati 'amma yasifun wa salamun 'ala al-mursalin wa al-hamdu lillahi Rabb al-'alamin", translation: "Glory be to your Lord, the Lord of Might, far above what they describe, and peace be upon the messengers, and praise be to Allah, Lord of the worlds" },
+  { text: "Allahumma as'aluka hana' ath-tha'ah wa bardi 'adhab", translation: "O Allah, I ask You for the comfort of obedience and the coolness of the punishment" },
+  { text: "La ilaha illallah Muhammad rasulullah", translation: "There is no god but Allah, Muhammad is the messenger of Allah" }
+];
+
+const quranVerses = [
+  { verse: "2:286", text: "Allah does not burden a soul beyond that it can bear", surah: "Al-Baqarah" },
+  { verse: "94:5-6", text: "For indeed, with hardship will be ease. Indeed, with hardship will be ease", surah: "Al-Inshirah" },
+  { verse: "76:29", text: "Indeed, this is an admonition. So whoever wills may take a way to their Lord", surah: "Al-Insan" },
+  { verse: "50:16", text: "And We have already created the human, and We know what his soul whispers to him", surah: "Qaf" },
+  { verse: "3:139", text: "So do not weaken and do not grieve, and you will be superior if you are believers", surah: "Al-Imran" },
+  { verse: "65:2-3", text: "Fear Allah, your Lord, and turn not away from Him. Whoever fears Allah - He will make for him a way out and will provide for him from where he does not expect", surah: "At-Talaq" },
+  { verse: "4:9", text: "And let those fear Allah - those who leave behind weak offspring whom they fear would be in perdition for them. So let them fear Allah and speak words of appropriate justice", surah: "An-Nisa" },
+  { verse: "31:34", text: "And with Him are the keys of the unseen; none knows them except Him", surah: "Luqman" },
+  { verse: "14:34", text: "And He has subjected to you whatever is in the heavens and whatever is on the earth", surah: "Ibrahim" },
+  { verse: "39:53", text: "Say, 'O My servants who have transgressed against themselves, do not despair of the mercy of Allah. Indeed, Allah forgives all sins'", surah: "Az-Zumar" }
+];
+
+function getPrayerTimes() {
+  const city = document.getElementById("city").value.trim();
 
   if (!city) {
-    alert("Please enter a city");
+    showError("prayer-results", "Please enter a city name");
     return;
   }
 
-  const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=US&method=2`;
+  const resultsDiv = document.getElementById("prayer-results");
+  resultsDiv.innerHTML = "⏳ Loading prayer times...";
+  resultsDiv.style.display = "block";
 
-  const response = await fetch(url);
-  const data = await response.json();
+  const url = `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(city)}&country=&method=2`;
 
-  const times = data.data.timings;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.code === 400 || !data.data) {
+        showError("prayer-results", `Could not find prayer times for "${city}". Please try another city.`);
+        return;
+      }
 
-  document.getElementById("results").innerHTML = `
-    <h2>Prayer Times for ${city}</h2>
-    <p>Fajr: ${times.Fajr}</p>
-    <p>Dhuhr: ${times.Dhuhr}</p>
-    <p>Asr: ${times.Asr}</p>
-    <p>Maghrib: ${times.Maghrib}</p>
-    <p>Isha: ${times.Isha}</p>
-  `;
+      const times = data.data.timings;
+      const date = data.data.date.gregorian.date;
+
+      let html = `<p><strong>Prayer Times for ${city}</strong></p>`;
+      html += `<p style="opacity: 0.7; font-size: 0.9rem;">Date: ${date}</p>`;
+      html += `<div class="prayer-time"><strong>Fajr:</strong> ${times.Fajr}</div>`;
+      html += `<div class="prayer-time"><strong>Sunrise:</strong> ${times.Sunrise}</div>`;
+      html += `<div class="prayer-time"><strong>Dhuhr:</strong> ${times.Dhuhr}</div>`;
+      html += `<div class="prayer-time"><strong>Asr:</strong> ${times.Asr}</div>`;
+      html += `<div class="prayer-time"><strong>Maghrib:</strong> ${times.Maghrib}</div>`;
+      html += `<div class="prayer-time"><strong>Isha:</strong> ${times.Isha}</div>`;
+
+      resultsDiv.innerHTML = html;
+      resultsDiv.classList.remove("error");
+    })
+    .catch(error => {
+      showError("prayer-results", "Failed to fetch prayer times. Please check your internet connection.");
+    });
 }
+
+function getQuranVerse() {
+  const random = Math.floor(Math.random() * quranVerses.length);
+  const verse = quranVerses[random];
+
+  const resultsDiv = document.getElementById("quran-results");
+  let html = `<p><strong>Surah ${verse.surah} (${verse.verse})</strong></p>`;
+  html += `<p style="margin-top: 10px; line-height: 1.8;">"${verse.text}"</p>`;
+
+  resultsDiv.innerHTML = html;
+  resultsDiv.classList.remove("error");
+  resultsDiv.style.display = "block";
+}
+
+function getDua() {
+  const random = Math.floor(Math.random() * duas.length);
+  const dua = duas[random];
+
+  const resultsDiv = document.getElementById("dua-results");
+  let html = `<p><strong>Du'a:</strong></p>`;
+  html += `<p style="margin-top: 10px; overflow-wrap: break-word; direction: auto;">"${dua.text}"</p>`;
+  html += `<p style="margin-top: 12px; opacity: 0.8; font-style: italic;">Translation: "${dua.translation}"</p>`;
+
+  resultsDiv.innerHTML = html;
+  resultsDiv.classList.remove("error");
+  resultsDiv.style.display = "block";
+}
+
+function showError(elementId, message) {
+  const resultsDiv = document.getElementById(elementId);
+  resultsDiv.innerHTML = `<div class="error">${message}</div>`;
+  resultsDiv.style.display = "block";
+  resultsDiv.classList.add("error");
+}
+
+// Show a verse on page load
+window.addEventListener('load', getQuranVerse);
 </script>
 
 </body>
